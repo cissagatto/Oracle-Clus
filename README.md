@@ -1,5 +1,5 @@
-# OraclePartitions
-This code is part of my doctoral research at PPG-CC/DC/UFSCar. It's oracle experimentation of Bell Partitions. All the bell partitions generated are tested using the CLUS framework, there is no validation of the partitions. The best partition is chosen after the process of all partitions.
+# Oracle Partitions Version 2
+This code is part of my doctoral research at PPG-CC/DC/UFSCar. It's oracle experimentation of Bell Partitions. All the bell partitions generated are tested using the CLUS framework, there is no validation of the partitions. The best partition is chosen after the process of all partitions. In this version we do not use the validation set together with the train set.
 
 # Type of Oracle Partitions
 <img src="https://github.com/cissagatto/Oracle-Clus/blob/main/images/tipos_particoes_oracle_transparente.png" width="300">
