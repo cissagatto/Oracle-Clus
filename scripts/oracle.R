@@ -116,11 +116,17 @@ cat("\nOracle: nome \t ", dataset_name)
 
 
 ##################################################################################################
- cat("\n\nCopy FROM google drive \n")
- destino = paste(FolderRoot, "/datasets/", dataset_name, sep="")
- origem = paste("cloud:elaine/Datasets/CrossValidation_WithValidation/", dataset_name, sep="")
- comando = paste("rclone -v copy ", origem, " ", destino, sep="")
- print(system(comando))
+# cat("\n\nCopy FROM google drive \n")
+# destino = paste(FolderRoot, "/datasets/", dataset_name, sep="")
+# origem = paste("cloud:elaine/Datasets/CrossValidation_WithValidation/", dataset_name, sep="")
+# comando = paste("rclone -v copy ", origem, " ", destino, sep="") 
+# cat("\n", comando, "\n") 
+# a = print(system(comando))
+# a = as.numeric(a)
+# if(a != 0) {
+# stop("Erro RCLONE")
+# quit("yes")
+# }
 
 
 ##################################################################################################
@@ -147,12 +153,17 @@ diretorios <- directories(dataset_name, folderResults)
 
 
 ##################################################################################################
- cat("\n Copy partitions from google drive")
- destino = paste(diretorios$folderBellPart, "/", dataset_name, sep="")
- origem = paste("cloud:elaine/[2021]ResultadosExperimentos/BellPartitions/", dataset_name, sep="")
- comando1 = paste("rclone -v copy ", origem, " ", destino, sep="")
- cat("\n\n", comando1)
- print(system(comando1))
+# cat("\n Copy partitions from google drive")
+# destino = paste(diretorios$folderBellPart, "/", dataset_name, sep="")
+# origem = paste("cloud:elaine/[2021]ResultadosExperimentos/BellPartitions/", dataset_name, sep="")
+# comando1 = paste("rclone -v copy ", origem, " ", destino, sep="")
+# cat("\n", comando1, "\n") 
+# a = print(system(comando1))
+# a = as.numeric(a)
+# if(a != 0) {
+# stop("Erro RCLONE")
+# quit("yes")
+# }
 
 
 
@@ -215,11 +226,17 @@ while(id_part<=n){
  system(str3a)
   
 ########################################################################################################################
-cat("\n Copy to google drive")
-origem = paste(diretorios$folderResultDataset, "/", dataset_name, "-Partition-", id_part, "-results.tar.gz", sep="")
-destino = paste("cloud:elaine/[2021]ResultadosExperimentos/Oracle-Clus/Train-Val-Test/", dataset_name, sep="")
-comando = paste("rclone -v copy ", origem, " ", destino, sep="")
-print(system(comando))
+# cat("\n Copy to google drive")
+# origem = paste(diretorios$folderResultDataset, "/", dataset_name, "-Partition-", id_part, "-results.tar.gz", sep="")
+# destino = paste("cloud:elaine/[2021]ResultadosExperimentos/Oracle-Clus/Train-Val-Test/", dataset_name, sep="")
+# comando = paste("rclone -v copy ", origem, " ", destino, sep="")
+# cat("\n", comando, "\n") 
+# a = print(system(comando))
+# a = as.numeric(a)
+# if(a != 0) {
+# stop("Erro RCLONE")
+# quit("yes")
+# }
   
  ########################################################################################################################
  cat("\n Copy to Folder Reports")
@@ -260,13 +277,18 @@ setwd(diretorios$folderReportsDataset)
 write.csv(runtime, "Other-Runtime.csv")
 cat("\n##################################################################################################")
 
-cat("\n##################################################################################################")
-cat("\n Copy to google drive")
-origem = paste(diretorios$folderReportsDataset)
-destino = paste("cloud:elaine/[2021]ResultadosExperimentos/Oracle-Clus/Train-Val-Test/", dataset_name, "/Reports/", sep="")
-comando = paste("rclone -v copy ", origem, " ", destino, sep="")
-cat("\n", comando, "\n")
-print(system(comando))
+# cat("\n##################################################################################################")
+# cat("\n Copy to google drive")
+# origem = paste(diretorios$folderReportsDataset)
+# destino = paste("cloud:elaine/[2021]ResultadosExperimentos/Oracle-Clus/Train-Val-Test/", dataset_name, "/Reports/", sep="")
+# comando = paste("rclone -v copy ", origem, " ", destino, sep="")
+# cat("\n", comando, "\n") 
+# a = print(system(comando))
+# a = as.numeric(a)
+# if(a != 0) {
+# stop("Erro RCLONE")
+# quit("yes")
+# }
 cat("\n##################################################################################################")
 
 cat("\n##################################################################################################")
