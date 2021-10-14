@@ -1,6 +1,9 @@
 # Oracle Partitions
 This code is part of my doctoral research at PPG-CC/DC/UFSCar. It's oracle experimentation of Bell Partitions. All the bell partitions generated are tested using the CLUS framework, there is no validation of the partitions. The best partition is chosen after the process of all partitions. 
 
+## How to cite 
+@misc{Gatto2021, author = {Gatto, E. C.}, title = {Oracle Partitions for Multilabel Classification Version 1}, year = {2021}, publisher = {GitHub}, journal = {GitHub repository}, howpublished = {\url{https://github.com/cissagatto/Oracle-Clus-TVT}}}
+
 
 **IMPORTANT**: All of my experiments use the validation, train and set test. But, in this version the code the train and validation sets are joint to build the model. This code was implemented thinking of that situation. Please, pay attention to this. You need to generated these sets when runing the multi-label cross-validation code.
 
