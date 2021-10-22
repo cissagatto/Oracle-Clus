@@ -106,19 +106,19 @@ cat("\nOracle: nome \t ", dataset_name)
 
 ##################################################################################################
 # DON'T RUN -- it's only for test the code
-# ds <- datasets[29,]
+# ds <- datasets[29,]#
 # dataset_name = ds$Name
 # number_dataset = ds$Id
 # number_cores = 10
 # number_folds = 10
-# folderResults = "/dev/shm/teste"
+# folderResults = "/dev/shm/res"
 ##################################################################################################
 
 
 ##################################################################################################
 # cat("\n\nCopy FROM google drive \n")
 # destino = paste(FolderRoot, "/datasets/", dataset_name, sep="")
-# origem = paste("cloud:elaine/Datasets/CrossValidation_WithValidation/", dataset_name, sep="")
+# origem = paste("cloud:Datasets/CrossValidation_WithValidation/", dataset_name, sep="")
 # comando = paste("rclone -v copy ", origem, " ", destino, sep="") 
 # cat("\n", comando, "\n") 
 # a = print(system(comando))
@@ -155,7 +155,7 @@ diretorios <- directories(dataset_name, folderResults)
 ##################################################################################################
 # cat("\n Copy partitions from google drive")
 # destino = paste(diretorios$folderBellPart, "/", dataset_name, sep="")
-# origem = paste("cloud:elaine/[2021]ResultadosExperimentos/BellPartitions/", dataset_name, sep="")
+# origem = paste("cloud:[2021]ResultadosExperimentos/BellPartitions/", dataset_name, sep="")
 # comando1 = paste("rclone -v copy ", origem, " ", destino, sep="")
 # cat("\n", comando1, "\n") 
 # a = print(system(comando1))
@@ -186,8 +186,8 @@ namesMeasures = c("")
 ##################################################################################################
 # EXECUTE                                                                                        # 
 ##################################################################################################
-count = 5
-id_part = 5
+count = 2
+id_part = 2
 while(id_part<=n){
   
   diretorios <- directories(dataset_name, folderResults)
@@ -245,7 +245,7 @@ while(id_part<=n){
  comando1 = paste("cp -r ", origem, " ", diretorios$folderReportsDataset, sep="")
  print(system(comando1))
   
- ########################################################################################################################
+ #######################################################################################################################
  cat("\n delete files")
  comando2 = paste("rm -r ", Folder)
  system(comando2)
