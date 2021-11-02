@@ -9,7 +9,7 @@ This code is part of my doctoral research at PPG-CC/DC/UFSCar. It's oracle exper
 All of my experiments use the validation, train and set test. But, in this version the code the train and validation sets are joint to build the model. This code was implemented thinking of that situation. Please, pay attention to this. You need to generated these sets when runing the multi-label cross-validation code.
 
 ## Type of Oracle Partitions
-<img src="" width="300">
+<img src="https://github.com/cissagatto/Oracle-Clus-TVT/blob/main/images/tipos_particoes_oracle.png" width="300">
 
 ## Scripts
 This source code consists of an R project for R Studio and the following R scripts:
