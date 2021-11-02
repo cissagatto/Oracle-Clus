@@ -104,8 +104,6 @@ This will compute all partitions for dataset Flags, using 10 cores and 10-folds 
 ## Results
 The results are stored in the folder _REPORTS_. 
 
-<img src="" width="300">
-
 ## Acknowledgment
 This study is financed in part by the Coordenação de Aperfeiçoamento de Pessoal de Nível Superior - Brasil (CAPES) - Finance Code 001
 
