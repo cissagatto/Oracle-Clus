@@ -27,8 +27,7 @@ This source code consists of an R project for R Studio and the following R scrip
 
 
 ## FlowChart
-<img src="" width="300">
-<img src="" width="300">
+<img src="https://github.com/cissagatto/Oracle-Clus-TVT/blob/main/images/Oracle.png" width="300">
 
 ## Folder Structure
 <img src="" width="300">
