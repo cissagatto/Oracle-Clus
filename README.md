@@ -123,11 +123,10 @@ This study is financed in part by the Coordenação de Aperfeiçoamento de Pesso
 
 [Linkedin](https://www.linkedin.com/company/27241216)
 
-[Instagram](https://www.instagram.com/professoracissa/)
+[Instagram](https://www.instagram.com/cissagatto/)
 
-[Facebook](https://www.facebook.com/ProfessoraCissa/)
+[Twitter](https://twitter.com/cissagatto)
 
-[Twitter](https://twitter.com/professoracissa)
 
 
 ## Report Error
