@@ -1,0 +1,8 @@
+Config, Value
+Dataset_Path, ~/Oracle-Clus/Datasets
+Temporary_Path, /dev/shm/o-GpositiveGO
+Partitions_Path, ~/Oracle-Clus/BellPartitions
+dataset_name, GpositiveGO
+number_dataset, 42
+number_folds, 10
+number_cores, 1

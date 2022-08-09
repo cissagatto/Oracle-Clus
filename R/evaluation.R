@@ -1,41 +1,30 @@
-  ##################################################################################################
-  # ORACLE PARTITIONS                                                                              #
-  # Copyright (C) 2021                                                                             #
-  # WITH CLUS -- JOIN TRAIN WITH VALIDATION                                                        #
-  #                                                                                                #
-  # This code is free software: you can redistribute it and/or modify it under the terms of the    #
-  # GNU General Public License as published by the Free Software Foundation, either version 3 of   #  
-  # the License, or (at your option) any later version. This code is distributed in the hope       #
-  # that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of         #
-  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for    #
-  # more details.                                                                                  #     
-  #                                                                                                #
-  # Elaine Cecilia Gatto | Prof. Dr. Ricardo Cerri | Prof. Dr. Mauri Ferrandin                     #
-  # Federal University of Sao Carlos (UFSCar: https://www2.ufscar.br/) Campus Sao Carlos           #
-  # Computer Department (DC: https://site.dc.ufscar.br/)                                           #
-  # Program of Post Graduation in Computer Science (PPG-CC: http://ppgcc.dc.ufscar.br/)            #
-  # Bioinformatics and Machine Learning Group (BIOMAL: http://www.biomal.ufscar.br/)               #
-  #                                                                                                #
-  ##################################################################################################
-  
-  
-  ##################################################################################################
-  # Script 4 - Evaluation                                                                          #
-  ##################################################################################################
-  
-  
-  
-  ##################################################################################################
-  # Configures the workspace according to the operating system                                     #
-  ##################################################################################################
-  sistema = c(Sys.info())
-  FolderRoot = ""
-  if (sistema[1] == "Linux"){
-    FolderRoot = paste("/home/", sistema[7], "/Oracle-Clus-TVT", sep="")
-  } else {
-    FolderRoot = paste("C:/Users/", sistema[7], "/Oracle-Clus-TVT", sep="")
-  }
-  FolderScripts = paste(FolderRoot, "/scripts/", sep="")
+###############################################################################
+# Oracle Partitions with CLUS                                                 #
+# Copyright (C) 2022                                                          #
+#                                                                             #
+# This code is free software: you can redistribute it and/or modify it under  #
+# the terms of the GNU General Public License as published by the Free        #
+# Software Foundation, either version 3 of the License, or (at your option)   #
+# any later version. This code is distributed in the hope that it will be     #
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of      #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General    #
+# Public License for more details.                                            #
+#                                                                             #
+# Elaine Cecilia Gatto | Prof. Dr. Ricardo Cerri | Prof. Dr. Mauri Ferrandin  #
+# Federal University of Sao Carlos (UFSCar: https://www2.ufscar.br/) |        #
+# Campus Sao Carlos | Computer Department (DC: https://site.dc.ufscar.br/)    #
+# Program of Post Graduation in Computer Science                              #
+# (PPG-CC: http://ppgcc.dc.ufscar.br/) | Bioinformatics and Machine Learning  #
+# Group (BIOMAL: http://www.biomal.ufscar.br/)                                #
+###############################################################################
+
+
+
+###############################################################################
+# SET WORKSAPCE                                                               #
+###############################################################################
+FolderRoot = "~/Oracle-Clus"
+FolderScripts = paste(FolderRoot, "/R", sep="")
   
   
   
@@ -52,10 +41,20 @@
   #   Return                                                                                       #
   #       true labels and predicts labels                                                          #
   ##################################################################################################
-  gather <- function(id_part, ds, dataset_name, number_folds, namesLabels, folderResults){
+  gather <- function(id_part,
+                     ds,
+                     dataset_name,
+                     number_dataset,
+                     number_cores,
+                     number_folds,
+                     folderResults,
+                     namesLabels){
     
     diretorios = directories(dataset_name, folderResults)
     info <- infoPartitions(id_part,dataset_name, folderResults)
+    FolderPartition = paste(diretorios$folderTest, "/Partition-",
+                            id_part, sep="")
+    if(dir.exists(FolderPartition)==FALSE){dir.create(FolderPartition)}
     
     if(number_folds==1){
       
@@ -66,8 +65,7 @@
       y_true = data.frame(apagar)
       y_pred = data.frame(apagar)  
       
-      FolderSplit = paste(diretorios$folderResultDataset, "/Partition-", 
-                          info$numberOfPartition, "/Split-1", sep="")
+      FolderSplit = paste(FolderPartition, "/Split-", f, sep="")
       
       g = 1
       while(g<=info$numberGroupsOfPartition){
@@ -96,9 +94,6 @@
         gc()
       }
       
-      #cat("\nSave files ", g, "\n")
-      FolderSplit = paste(diretorios$folderResultDataset, "/Partition-", 
-                          info$numberOfPartition, "/Split-1", sep="")
       setwd(FolderSplit)
       y_pred = y_pred[,-1]
       y_true = y_true[,-1]
@@ -114,14 +109,34 @@
       f = 1
       gatherParal <- foreach(f = 1:number_folds) %dopar%{
         
+        cat("\n\nFold: ", f)
+        
+        #####################################################################
+        FolderRoot = "~/Oracle-Clus"
+        FolderScripts = paste(FolderRoot, "/R", sep="")
+        
+        #####################################################################
+        # LOAD LIBRARIES
+        setwd(FolderScripts)
+        source("libraries.R")
+        
+        setwd(FolderScripts)
+        source("utils.R")
+        
+        #####################################################################
+        diretorios = directories(dataset_name, folderResults)
+        
+        #####################################################################
+        FolderSplit = paste(FolderPartition, "/Split-", f, sep="")
+        
+        # get bell partition information
+        info = infoPartitions(id_part, dataset_name, folderResults)
+        
+        
         # data frame
         apagar = c(0)
         y_true = data.frame(apagar)
         y_pred = data.frame(apagar)  
-        
-        cat("\nFold: ", f)
-        
-        FolderSplit = paste(diretorios$folderResultDataset, "/Partition-", info$numberOfPartition, "/Split-", f, sep="")
         
         g = 1
         while(g<=info$numberGroupsOfPartition){
@@ -130,18 +145,13 @@
           
           FolderGroup = paste(FolderSplit, "/Group-", g, sep="")
           
-          #cat("\nGather y_true ", g, "\n")
           setwd(FolderGroup)
           y_true_gr = data.frame(read.csv("y_true.csv"))
           y_true = cbind(y_true, y_true_gr)
-          #print(nrow(y_true))
           
-          #cat("\nGather y_predict ", g, "\n")
           y_pred_gr = data.frame(read.csv("y_predict.csv"))
           y_pred = cbind(y_pred, y_pred_gr)
-          #print(nrow(y_pred))
           
-          # deleting files
           unlink("y_true.csv", recursive = TRUE)
           unlink("y_predict.csv", recursive = TRUE)
           unlink("inicioFimRotulos.csv", recursive = TRUE)
@@ -150,8 +160,6 @@
           gc()
         }
         
-        #cat("\nSave files ", g, "\n")
-        FolderSplit = paste(diretorios$folderResultDataset, "/Partition-", info$numberOfPartition, "/Split-", f, sep="")
         setwd(FolderSplit)
         y_pred = y_pred[,-1]
         y_true = y_true[,-1]
@@ -185,15 +193,22 @@
   #   Return                                                                                       #
   #       Assessment measures for each hybrid partition                                            #
   ##################################################################################################
-  eval <- function(id_part, ds, dataset_name, number_folds, namesLabels, folderResults){
+  eval <- function(id_part,
+                   ds,
+                   dataset_name,
+                   number_dataset,
+                   number_cores,
+                   number_folds,
+                   folderResults,
+                   namesLabels){
     
     diretorios = directories(dataset_name, folderResults)
     info <- infoPartitions(id_part, dataset_name, folderResults)
+    FolderPartition = paste(diretorios$folderTest, "/Partition-",
+                            id_part, sep="")
+    if(dir.exists(FolderPartition)==FALSE){dir.create(FolderPartition)}
     
     if(number_folds==1){
-      
-      library("mldr")
-      library("utiml")
       
       cat("\nFold Único")
       # specifyin folder for the fold
@@ -236,18 +251,34 @@
       f = 1
       evalParal <- foreach(f = 1:number_folds) %dopar%{  
         
-        library("mldr")
-        library("utiml")
+        cat("\n\nFold: ", f)
         
-        cat("\nFold: ", f)
+        #####################################################################
+        FolderRoot = "~/Oracle-Clus"
+        FolderScripts = paste(FolderRoot, "/R", sep="")
+        
+        #####################################################################
+        # LOAD LIBRARIES
+        setwd(FolderScripts)
+        source("libraries.R")
+        
+        setwd(FolderScripts)
+        source("utils.R")
+        
+        #####################################################################
+        diretorios = directories(dataset_name, folderResults)
+        
+        #####################################################################
+        FolderSplit = paste(FolderPartition, "/Split-", f, sep="")
+        if(dir.exists(FolderSplit)==FALSE){dir.create(FolderSplit)}
+        
+        # get bell partition information
+        info = infoPartitions(id_part, dataset_name, folderResults)
         
         # data frame
         apagar = c(0)
         confMatPartitions = data.frame(apagar)
         partitions = c()
-        
-        # specifyin folder for the fold
-        FolderSplit = paste(diretorios$folderResultDataset, "/Partition-", info$numberOfPartition, "/Split-", f, sep="")
         
         # get the true and predict lables
         setwd(FolderSplit)
@@ -303,11 +334,20 @@
   #   Return                                                                                       #
   #       Assessment measures for all folds                                                        #
   ##################################################################################################
-  gatherEvaluation <- function(id_part, ds, dataset_name, number_folds, namesLabels, folderResults){  
+  gatherEvaluation <- function(id_part,
+                               ds,
+                               dataset_name,
+                               number_dataset,
+                               number_cores,
+                               number_folds,
+                               folderResults,
+                               namesLabels){  
     
     diretorios = directories(dataset_name, folderResults)
     info <- infoPartitions(id_part, dataset_name, folderResults)
-    FolderPartition = paste(diretorios$folderResultDataset, "/Partition-", info$numberOfPartition, sep="")
+    FolderPartition = paste(diretorios$folderTest, "/Partition-",
+                            id_part, sep="")
+    if(dir.exists(FolderPartition)==FALSE){dir.create(FolderPartition)}
     
     # vector with names
     measures = c("accuracy","average-precision","clp","coverage","F1","hamming-loss","macro-AUC",
@@ -354,9 +394,6 @@
         #names(avaliado4)[f+1] = paste("Fold-", f, sep="")
         nomesFolds[f] = paste("Fold-", f, sep="")
         
-        setwd(FolderSplit)
-        unlink(str)
-        
         f = f + 1
         gc()
         
@@ -367,18 +404,22 @@
       colnames(avaliado4) = c("measures", nomesFolds)
       
       setwd(FolderPartition)
-      nome3 = paste("Partition-", info$numberOfPartition, "-Evaluated.csv", sep="")
+      nome3 = paste("Partition-", info$numberOfPartition, 
+                    "-Evaluated.csv", sep="")
       write.csv(avaliado4, nome3, row.names = FALSE)
       
-      setwd(diretorios$folderReportsDataset)
-      nome3 = paste("Partition-", info$numberOfPartition, "-Evaluated.csv", sep="")
+      setwd(diretorios$folderReportsD)
+      nome3 = paste("Partition-", info$numberOfPartition,
+                    "-Evaluated.csv", sep="")
       write.csv(avaliado4, nome3, row.names = FALSE)
       
-      setwd(diretorios$folderResultDataset)
-      nome3 = paste("Partition-", info$numberOfPartition, "-Evaluated.csv", sep="")
+      setwd(diretorios$folderResults)
+      nome3 = paste("Partition-", info$numberOfPartition, 
+                    "-Evaluated.csv", sep="")
       write.csv(avaliado4, nome3, row.names = FALSE)
       
-      nome4 = paste("Partition-", info$numberOfPartition, "-Sum-Eval.csv", sep="")
+      nome4 = paste("Partition-", info$numberOfPartition, 
+                    "-Sum-Eval.csv", sep="")
       avaliado5 = avaliado4[,-1]
       avaliado6 = data.frame(apply(avaliado5, 1, mean))
       colnames(avaliado6) = "Mean-10Folds"
@@ -387,10 +428,10 @@
       setwd(FolderPartition)
       write.csv(avaliado7, nome4)
       
-      setwd(diretorios$folderResultDataset)
+      setwd(diretorios$folderReportsD)
       write.csv(avaliado7, nome4)
       
-      setwd(diretorios$folderReportsDataset)
+      setwd(diretorios$folderResults)
       write.csv(avaliado7, nome4) 
     }
     
