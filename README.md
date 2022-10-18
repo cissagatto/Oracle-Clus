@@ -86,9 +86,6 @@ To run this code you will need a configuration file saved in *csv* format and wi
 
 * Use folders like */dev/shm*, *tmp* or *scratch* here.
 
-*Example:*
-
-<img src="" width="300">
 
 You can save configuration files wherever you want. The absolute path will be passed as a command line argument.
 
